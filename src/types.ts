@@ -33,6 +33,13 @@ type Map = {
   description: string
 }
 
+// This breaks convention because we want to
+// extend this later, which we are unable
+// to do with types.
+interface Action {
+ type: string
+}
+
 export type {
-  MapItem, MapProps, Point, Dictionary, Map, filterMappings,
+  Action, MapItem, MapProps, Point, Dictionary, Map, filterMappings,
 }
