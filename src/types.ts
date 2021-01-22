@@ -23,4 +23,16 @@ type MapProps = {
     points: Point[]
 }
 
-export type { MapItem, MapProps, Point }
+type filterMappings = {fieldType: 'oneOf', default: string[]} | {fieldType: 'manyOf', default: string[]} | {fieldType: 'range', default:{low: number, high: number}}
+
+type Map = {
+  defaultFilterValues: Dictionary<filterMappings>
+  id: number
+  points: MapItem[]
+  title: string
+  description: string
+}
+
+export type {
+  MapItem, MapProps, Point, Dictionary, Map, filterMappings,
+}

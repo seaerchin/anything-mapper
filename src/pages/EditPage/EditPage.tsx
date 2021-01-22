@@ -5,12 +5,14 @@ import {
 import _ from 'lodash'
 
 import MAP from '../../constants/map'
-
 import { MapItem } from '../../types'
+
+// higher up components
+import { Card } from '../../components/Card'
 
 import { MapPage } from '../Map'
 
-import { Card } from '../../components/Card'
+import Drawer from './components/Drawer'
 
 // workaround for typescript complaints
 type eventType = {
@@ -39,19 +41,9 @@ const EditPage = () => {
   const [searchedText, setSearchedText] = useControllableState({ defaultValue: '' })
   const handleUserInput = (event: eventType) => setSearchedText(event.target.value)
 
-  const [searchedField, setSearchedField] = useControllableState<searchableFields>({
+  const [searchedField] = useControllableState<searchableFields>({
     defaultValue: 'title',
   })
-
-  const handleUserSelect = (event: eventType) => {
-    switch (event.target.value) {
-      case 'tags':
-        setSearchedField(event.target.value)
-        break
-      case 'title':
-        setSearchedField(event.target.value)
-    }
-  }
 
   const filteredLocations = filterByField(searchedField, searchedText, MAP.points)
 
@@ -59,18 +51,15 @@ const EditPage = () => {
   // consists of a leftpanel and a right panel
     <Flex direction="row" pt="12px">
       {/* left panel holds card + controls stateful logic */}
-      <Container maxW="30%" py="40px" bg="#F6F9FD">
+      <Container maxW="30%" py="40px" bg="#F6F9FD" maxH="80vh" overflow="scroll">
         <VStack spacing="30px">
           <HStack alignSelf="flex-start" spacing={2}>
+            <Drawer />
             <Input
               placeholder="search!"
               value={searchedText}
               onChange={handleUserInput}
             />
-            <Select onChange={handleUserSelect} maxW="30%">
-              <option value="title">Title</option>
-              <option value="tags">Tags</option>
-            </Select>
           </HStack>
           {filteredLocations.map(({
             title, subtitle, body, tags,
