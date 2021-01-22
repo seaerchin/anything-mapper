@@ -1,24 +1,21 @@
 import React from 'react'
 import {
-  Box, Image, Tag, Text,
+  Box, Image, Tag,
 } from '@chakra-ui/react'
 
-type CardProps = {
-  title: string
-  subtitle: string
-  imageURL?: string
-  body: string[]
-  tags?: string[]
-  meta: {
-    lat: number,
-    long: number
-  }
-}
+import { MapItem } from '../../types'
 
 const Card = ({
   title, subtitle, imageURL, body, tags, meta,
-}: CardProps) => (
-  <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+}: MapItem) => (
+  <Box
+    maxW="sm"
+    maxH="sm"
+    borderWidth="1px"
+    borderRadius="lg"
+    overflow="hidden"
+    boxShadow="md"
+  >
     <Image src={imageURL} />
 
     <Box p="6">
@@ -52,6 +49,7 @@ const Card = ({
 Card.defaultProps = {
   imageURL: 'https://bit.ly/2Z4KKcF',
   tags: [],
+  meta: {},
 }
 
 export { Card }
