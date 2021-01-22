@@ -44,7 +44,6 @@ const EditPage = () => {
   })
 
   const handleUserSelect = (event: eventType) => {
-    console.log('VALUE', event.target.value)
     switch (event.target.value) {
       case 'tags':
         setSearchedField(event.target.value)

@@ -2,13 +2,17 @@ type MapItem = {
     title: string
     subtitle: string
     imageURL?: string
-    body: string[]
+    body: Dictionary<string>
     tags?: string[]
     meta: {
       lat: number,
       long: number
     }
   }
+
+type Dictionary<T> = {
+  [key: string]: T
+}
 
 type Point = {
     lat: number,

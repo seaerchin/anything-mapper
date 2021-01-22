@@ -1,16 +1,37 @@
 import React from 'react'
 import {
   Box, Image, Tag,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+
 } from '@chakra-ui/react'
+import _ from 'lodash'
 
 import { MapItem } from '../../types'
+
+const accordionItem = (title: string, body: string) => (
+  <AccordionItem>
+    <AccordionButton>
+      <Box flex="1" textAlign="left">
+        {title}
+      </Box>
+      <AccordionIcon />
+    </AccordionButton>
+    <AccordionPanel pb={4} textAlign="left">
+      {body}
+    </AccordionPanel>
+  </AccordionItem>
+)
 
 const Card = ({
   title, subtitle, imageURL, body, tags, meta,
 }: MapItem) => (
   <Box
     maxW="sm"
-    maxH="sm"
+    // maxH="sm"
     borderWidth="1px"
     borderRadius="lg"
     overflow="hidden"
@@ -32,7 +53,9 @@ const Card = ({
         <br />
         {subtitle}
       </Box>
-
+      <Accordion allowToggle>
+        {_.map(body, (value, key) => accordionItem(key, value))}
+      </Accordion>
       <Box d="flex" mt="2" alignItems="center">
         {
           tags?.map((tagDescription) => (
