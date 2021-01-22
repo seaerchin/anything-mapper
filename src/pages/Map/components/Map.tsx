@@ -23,9 +23,10 @@ const makePoint = ({ lat, long }: Point) => (
   </Marker>
 )
 
+const Map = ReactMapboxGl({ accessToken: token.public })
+
 // TODO: fix visual bug where initial render not full
 const MapComponent = ({ points }: MapProps) => {
-  const Map = ReactMapboxGl({ accessToken: token.public })
   const center = calculateCenter(points)
   return (
     <Map
