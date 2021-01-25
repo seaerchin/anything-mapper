@@ -5,6 +5,7 @@ import { Slider, Tooltip } from '@material-ui/core'
 type SliderProps = {
   low: number
   high: number
+  onChange: (value: number[]) => void
 }
 
 type tooltipProps = {
@@ -19,9 +20,9 @@ const ValueLabelComponent = ({ children, open, value }: tooltipProps) => (
   </Tooltip>
 )
 
-const RangeSlider = ({ low, high }: SliderProps) => {
+const RangeSlider = ({ low, high, onChange }: SliderProps) => {
   const [value, setValue] = useState<number[]>([low, high])
-  const handleChange = (event: any, newValue: number | number[]) => {
+  const handleChange = (event: any, newValue: number[]) => {
     setValue(newValue as number[])
   }
 
@@ -29,7 +30,11 @@ const RangeSlider = ({ low, high }: SliderProps) => {
     <Slider
       value={value}
       ValueLabelComponent={ValueLabelComponent}
-      onChange={handleChange}
+      onChange={(event, newValue) => {
+        const n = newValue as number[]
+        handleChange(event, n)
+        onChange(n)
+      }}
       valueLabelDisplay="auto"
       aria-labelledby="range-slider"
     />

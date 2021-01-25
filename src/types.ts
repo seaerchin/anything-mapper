@@ -2,7 +2,7 @@ type MapItem = {
     title: string
     subtitle: string
     imageURL?: string
-    body: Dictionary<string>
+    body: Dictionary<string | number | string[]>
     tags?: string[]
     meta: {
       lat: number,
@@ -23,7 +23,10 @@ type MapProps = {
     points: Point[]
 }
 
-type filterMappings = {fieldType: 'oneOf', default: string[]} | {fieldType: 'manyOf', default: string[]} | {fieldType: 'range', default:{low: number, high: number}}
+type filterType = 'oneOf' | 'manyOf' | 'range'
+type filterValues = string | number[]
+
+type filterMappings = {fieldType: 'oneOf', default: string[]} | {fieldType: 'manyOf', default: string[]} | {fieldType: 'range', default: number[]}
 
 type Map = {
   defaultFilterValues: Dictionary<filterMappings>
@@ -41,5 +44,5 @@ interface Action {
 }
 
 export type {
-  Action, MapItem, MapProps, Point, Dictionary, Map, filterMappings,
+  filterValues, filterType, Action, MapItem, MapProps, Point, Dictionary, Map, filterMappings,
 }
