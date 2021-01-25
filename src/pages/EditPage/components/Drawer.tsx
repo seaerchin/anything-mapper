@@ -24,38 +24,65 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons'
 import _ from 'lodash'
 
+import { useMapState } from '../../../contexts /MapContext'
+
 import { RangeSlider } from '../../../components/Slider'
 
-import { Dictionary, filterMappings } from '../../../types'
-import MAP from '../../../constants/map'
+import {
+  Dictionary, filterType, filterMappings, filterValues,
+} from '../../../types'
 
 // the component to be rendered is a discriminated union
 // based on the filterFieldType
 type ComponentProps = {
   fieldInformation: filterMappings
+  onChange: (payload: filterValues, type: filterType) => void
+  displayValue: filterValues | Dictionary<boolean>
 }
 
 // NOTE: we need to handle state but currently this isn't done
-const Component = ({ fieldInformation }: ComponentProps) => {
+// i want ot invoke like so
+// onChange = (event) => {onChange(event.target.value)}
+// so my target has to be bound prior to this
+const Component = ({ fieldInformation, onChange, displayValue }: ComponentProps) => {
   switch (fieldInformation.fieldType) {
-    case 'range':
-      return <RangeSlider low={fieldInformation.default.low} high={fieldInformation.default.high} />
-    case 'oneOf':
+    case 'range': {
+      const value = displayValue as number[]
       return (
-        <Select maxW="30%">
+        <RangeSlider
+          onChange={(event) => onChange(event, 'range')}
+          low={value ? value[0] : fieldInformation.default[0]}
+          high={value ? value[1] : fieldInformation.default[1]}
+        />
+      )
+    }
+    case 'oneOf': {
+      // NOTE: this might cause state bugs
+      const value = displayValue as string
+      return (
+        <Select
+          value={value}
+          onChange={(event) => onChange(event.target.value, 'oneOf')}
+        >
           {fieldInformation.default.map(
             (textOption) => <option value={textOption}>{textOption}</option>,
           )}
         </Select>
       )
-    case 'manyOf':
+    }
+    case 'manyOf': {
+      const checkboxValues = displayValue as Dictionary<boolean> ?? {}
       return (
         <Wrap>
           <HStack>
             {fieldInformation.default.map(
               (textOption) => (
                 <WrapItem>
-                  <Checkbox>
+                  <Checkbox
+                    isChecked={!!checkboxValues[textOption]}
+                    value={textOption}
+                    onChange={() => onChange(textOption, 'manyOf')}
+                  >
                     <option value={textOption}>{textOption}</option>
                   </Checkbox>
                 </WrapItem>
@@ -64,17 +91,20 @@ const Component = ({ fieldInformation }: ComponentProps) => {
           </HStack>
         </Wrap>
       )
+    }
   }
   // either ts or eslint complains.
   return null
 }
 
 // drawer maps the current search state back to the provider
-// TODO: connect this to an actual provider
 const Drawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    map, dispatch, filterOptions,
+  } = useMapState()
   const btnRef = useRef(null)
-  const { defaultFilterValues } = MAP
+  const defaultFilterValues = map?.defaultFilterValues
 
   return (
     <>
@@ -104,7 +134,16 @@ const Drawer = () => {
                           <AccordionIcon />
                         </AccordionButton>
                         <AccordionPanel pb={4}>
-                          <Component fieldInformation={component} />
+                          {/* title is what i want */}
+                          <Component
+                            displayValue={filterOptions[title]}
+                            fieldInformation={component}
+                            onChange={(payload, type) => dispatch({
+                              payload,
+                              type,
+                              fieldName: title,
+                            })}
+                          />
                         </AccordionPanel>
                       </AccordionItem>
                     )))}

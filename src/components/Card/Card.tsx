@@ -53,7 +53,7 @@ const Card = ({
         {subtitle}
       </Box>
       <Accordion allowToggle>
-        {_.map(body, (value, key) => accordionItem(key, value))}
+        {_.map(body, (value, key) => accordionItem(key, String(value)))}
       </Accordion>
       <Box d="flex" mt="2" alignItems="center">
         {
