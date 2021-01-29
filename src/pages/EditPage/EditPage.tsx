@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react'
 import _ from 'lodash'
 
-import { MapStateProvider, useMapState } from '../../contexts /MapContext'
+import { useMapState } from '../../contexts /MapContext'
 import { MapItem } from '../../types'
 import { Card } from '../../components/Card'
 
@@ -28,7 +28,7 @@ const filterByField = (
   searchedText: string,
   mapItems: MapItem[],
 ) => _.filter(mapItems, ((mapObject) => ((filteredField === 'title')
-  ? mapObject[filteredField].includes(searchedText)
+  ? _.toLower(mapObject[filteredField]).includes(_.toLower(searchedText))
   : _.some(mapObject[filteredField],
     (tag) => tag.includes(searchedText))))) // searching on tags now
 
@@ -38,7 +38,7 @@ const EditPage = () => {
   // TODO: shift to hook
   const [searchedText, setSearchedText] = useControllableState({ defaultValue: '' })
   const handleUserInput = (event: eventType) => setSearchedText(event.target.value)
-  const { filteredLocations } = useMapState()
+  const { filteredLocations, filterOptions } = useMapState()
 
   const [searchedField] = useControllableState<searchableFields>({
     defaultValue: 'title',
@@ -49,34 +49,32 @@ const EditPage = () => {
 
   return (
   // consists of a leftpanel and a right panel
-    <MapStateProvider>
-      <Flex direction="row" pt="12px">
-        {/* left panel holds card + controls stateful logic */}
-        <Container maxW="30%" py="40px" bg="#F6F9FD" maxH="80vh" overflow="scroll">
-          <VStack spacing="30px">
-            <HStack alignSelf="flex-start" spacing={2}>
-              <Drawer />
-              <Input
-                placeholder="search!"
-                value={searchedText}
-                onChange={handleUserInput}
-              />
-            </HStack>
-            {filteredLocations.map(({
-              title, subtitle, body, tags,
-            }) => (
-              <Card title={title} subtitle={subtitle} body={body} tags={tags} />
-            ))}
-          </VStack>
-        </Container>
-        <Box width="100%">
-          <MapPage points={newFilteredLocations.map(
-            ({ meta: { lat, long } }) => ({ lat, long }),
-          )}
-          />
-        </Box>
-      </Flex>
-    </MapStateProvider>
+    <Flex direction="row" pt="12px">
+      {/* left panel holds card + controls stateful logic */}
+      <Container maxW="30%" py="40px" bg="#F6F9FD" maxH="80vh" overflow="scroll">
+        <VStack spacing="30px">
+          <HStack alignSelf="flex-start" spacing={2}>
+            <Drawer />
+            <Input
+              placeholder="search!"
+              value={searchedText}
+              onChange={handleUserInput}
+            />
+          </HStack>
+          {newFilteredLocations.map(({
+            title, subtitle, body, tags,
+          }) => (
+            <Card title={title} subtitle={subtitle} body={body} tags={tags} />
+          ))}
+        </VStack>
+      </Container>
+      <Box width="100%">
+        <MapPage points={newFilteredLocations.map(
+          ({ meta: { lat, long } }) => ({ lat, long }),
+        )}
+        />
+      </Box>
+    </Flex>
   )
 }
 

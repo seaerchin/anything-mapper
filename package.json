@@ -18,6 +18,7 @@
     "@types/react-dom": "^16.9.10",
     "craco-alias": "^2.1.1",
     "framer-motion": "^3.2.1",
+    "husky": "^4.3.8",
     "lodash": "^4.17.20",
     "mapbox-gl": "^2.0.1",
     "react": "^17.0.1",

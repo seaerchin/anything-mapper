@@ -40,10 +40,6 @@ type ComponentProps = {
   displayValue: filterValues | Dictionary<boolean>
 }
 
-// NOTE: we need to handle state but currently this isn't done
-// i want ot invoke like so
-// onChange = (event) => {onChange(event.target.value)}
-// so my target has to be bound prior to this
 const Component = ({ fieldInformation, onChange, displayValue }: ComponentProps) => {
   switch (fieldInformation.fieldType) {
     case 'range': {
@@ -64,6 +60,7 @@ const Component = ({ fieldInformation, onChange, displayValue }: ComponentProps)
           value={value}
           onChange={(event) => onChange(event.target.value, 'oneOf')}
         >
+          <option aria-label="default" value="" />
           {fieldInformation.default.map(
             (textOption) => <option value={textOption}>{textOption}</option>,
           )}

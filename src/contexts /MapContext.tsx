@@ -1,10 +1,10 @@
 import React, {
   createContext, useContext, useState, useEffect, useReducer, ReactChild, ReactChildren,
 } from 'react'
-import _, { forEach } from 'lodash'
+import _ from 'lodash'
 
 import {
-  Map, Action, Dictionary, filterMappings, MapItem, filterType, filterValues,
+  Map, Action, Dictionary, MapItem, filterType, filterValues,
 } from '../types'
 import MAP from '../constants/map'
 
@@ -33,7 +33,7 @@ const filterOneOf = (mapItems: MapItem[], searchedField: string) => _.filter(
   mapItems,
   (mapItem) => {
     const values = _.values(mapItem.body)
-    return values.includes(searchedField)
+    return searchedField ? values.includes(searchedField) : true
   },
 )
 
@@ -44,7 +44,7 @@ const filterRange = (
 ) => _.filter(mapItems, (mapItem) => {
   const searchedFieldRanges = mapItem.body[searchedField] as number
   const [lower, upper] = range
-  return searchedFieldRanges && searchedFieldRanges >= lower && searchedFieldRanges <= upper
+  return searchedFieldRanges >= lower && searchedFieldRanges <= upper
 })
 
 const computeFilteredMapItems = (map: Map, filterOptions: filterOptionStates) => {
@@ -75,7 +75,7 @@ const computeFilteredMapItems = (map: Map, filterOptions: filterOptionStates) =>
       case 'range': {
         const range = filterOptions[fieldToFilter] as number[]
         // TODO: figure out how to type this
-        // filteredItems = filterRange(filteredItems, range, fieldToFilter)
+        filteredItems = filterRange(filteredItems, range, fieldToFilter)
       }
     }
   })
@@ -141,7 +141,6 @@ const MapStateProvider = ({ children }: ProviderProps) => {
   )
 
   const filteredLocations = (map && computeFilteredMapItems(map, filterOptions)) || []
-  console.log(filteredLocations)
 
   // every time map changes, refetch from backend with the mapID
   useEffect(() => {

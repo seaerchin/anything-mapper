@@ -3,48 +3,47 @@ import { Map } from '../types'
 // TODO: update mapItem manyOf type
 const MAP_POINT = {
   id: 0,
-  title: 'test',
-  subtitle: 'i am a tset location',
+  title: 'Punggol Polyclinic',
+  subtitle: 'vaccinate me',
   // this turns into an accordion of k: v
   // this is the field that is filtered on
-  body: { price: 50, location: 'east coast', amenities: ['plants'] },
-  tags: ['test', 'location', 'restaurant'],
+  body: { price: 50, location: 'Punggol', amenities: ['plants'] },
+  tags: ['polyclinic', 'accessible'],
   meta: {
-    lat: 24.63,
-    long: 23.3,
+    lat: 1.4032283496291196,
+    long: 103.91307345396827,
   },
 }
 
 const MAP_POINT_TWO = {
   id: 1,
-  title: 'test2',
-  subtitle: 'different',
-  body: { price: 30, location: 'orchard', amenities: ['bbq'] },
-  tags: ['hello', 'world'],
+  title: 'Lian Clinic',
+  subtitle: 'vaccinate me too',
+  body: { price: 30, location: 'Marsiling', amenities: ['air con'] },
+  tags: ['private clinic', 'caring'],
   meta: {
-    lat: 24.6,
-    long: 23.4,
+    lat: 1.4435207041227593,
+    long: 103.77789858380173,
   },
 }
 
 const MAP_POINT_THREE = {
   id: 2,
-  title: 'test3',
-  subtitle: 'same',
-  body: { price: 100, location: 'singapore' },
-  tags: ['aaa', 'bbb'],
+  title: 'Raffles Medical Clinic',
+  subtitle: 'vaccinate me three',
+  body: { price: 100, location: 'Sengkang', amenities: ['food'] },
+  tags: ['expensive'],
   meta: {
-    lat: 24.61,
-    long: 23.4,
+    lat: 1.3936355744766076,
+    long: 103.89566929206349,
   },
 }
 
 const MAP: Map = {
   id: 0,
-  // points: [0, 1], // think this should be our representation but for now stick with below
-  points: [MAP_POINT, MAP_POINT_TWO, MAP_POINT_THREE, MAP_POINT, MAP_POINT, MAP_POINT],
-  title: 'list of postal boxes',
-  description: 'this is a list of all the postal boxes lmao',
+  points: [MAP_POINT, MAP_POINT_TWO, MAP_POINT_THREE],
+  title: 'Vaccination Clinics',
+  description: 'Get your jab today',
   // determines what can be filtered (shown in drawer pane)
   defaultFilterValues: {
     price: {
@@ -53,11 +52,11 @@ const MAP: Map = {
     },
     amenities: {
       fieldType: 'manyOf',
-      default: ['pool', 'bbq', 'plants'],
+      default: ['air con', 'food', 'plants'],
     },
     location: {
       fieldType: 'oneOf',
-      default: ['singapore', 'orchard', 'east coast'],
+      default: ['Punggol', 'Marsiling', 'Sengkang'],
     },
   },
 }
